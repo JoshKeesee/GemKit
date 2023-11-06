@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>
+		<%= appName %> - live learning game show
+	</title>
+	<link rel="stylesheet" href="css/main.css" />
+	<link rel="stylesheet" href="<%= css %>" />
+	<link rel="icon" href="<%= icon %>" />
+</head>
+
+<body>
+	<div id="header">
+		<div id="icon">
+			<img src="<%= icon %>" />
+		</div>
+		<div id="title">
+			<%= appName %>
+		</div>
+		<div id="join-game" class="button accent">
+			Join Game
+		</div>
+		<div id="sign-up" class="button">
+			Sign Up
+		</div>
+	</div>
+	<div id="content">
+		<span id="quote">
+			<div>
+				Hey, I'm Josh! I started <%= appName %> as a high school project.
+				<br><br>
+				Games really helped me become engaged in school. That's why I built <%= appName %> — to be the kind of game I'd want to play in class.
+				<br><br>
+				Can't wait for you to give it a try!
+			</div>
+			<div id="name">- Josh K.</div>
+		</span>
+	</div>
+	<div id="footer">
+		&copy;<%= (new Date()).getFullYear() %> <%= appName %>
+		<br>
+		&reg; All Rights Reserved
+	</div>
+	<script src="<%= js %>"></script>
+</body>
