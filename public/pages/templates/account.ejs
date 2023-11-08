@@ -1,0 +1,23 @@
+<div id="account" class="background"></div>
+<div id="account" class="container">
+	<div id="form">
+		<a id="title" href="/">
+			<% for (let i = 0; i < appName.split("").length; i++) { %>
+				<span><%= appName.split("")[i] %></span>
+			<% } %>
+		</a>
+		<hr id="bar">
+		<div id="google-button" class="button outline">
+			<img id="google" src="images/google.svg" />
+			Continue with Google
+		</div>
+		<div id="span">
+			<span id="bar"></span>or<span id="bar"></span>
+		</div>
+		<div id="cont">
+			<h3>Continue with email...</h3>
+			<input id="email" type="email" placeholder="Email address..." />
+			<div id="continue" class="button disabled">Continue</div>
+		</div>
+	</div>
+</div>

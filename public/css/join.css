@@ -1,0 +1,74 @@
+#join.container {
+	position: absolute;
+	background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("images/background.png") repeat 0 0;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#join #title {
+	transform: scale(2.4);
+	margin: 20px 80px;
+	user-select: none;
+}
+
+#join.container #form {
+	min-width: 38%;
+	height: fit-content;
+	padding: 30px 33px 30px;
+	border-radius: 7px;
+	background: white;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	transition: transform 0.5s, opacity 0.5s;
+}
+
+#join input[type="number"], #join input[type="text"] {
+	font-family: "Product Sans";
+	font-size: 25px;
+	height: 70px;
+	outline: none;
+	border-radius: 5px;
+	width: 100%;
+	border: 2.9px solid #838383;
+	padding: 5px;
+	box-sizing: border-box;
+	text-align: center;
+	font-weight: bold;
+	letter-spacing: 0.5px;
+	transition: border-color 0.21s;
+	margin-top: 14px;
+	margin-bottom: 7px;
+}
+
+#join input[type="number"]:focus, #join input[type="text"]:focus {
+	border-color: #303f9f;
+}
+
+@media screen and (max-width: 800px) {
+	#join.container #form {
+		margin-left: 10px;
+		margin-right: 10px;
+		padding: 20px 23px 20px;
+	}
+	#join.container #title {
+		transform: scale(1.7);
+		margin: 10px 40px;
+	}
+	#join input[type="number"], #join input[type="text"] {
+		margin-top: 5px;
+		height: 50px;
+		font-size: 20px;
+	}
+	#join-game {
+		height: 45px;
+		font-size: 20px;
+	}
+}

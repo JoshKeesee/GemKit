@@ -1,0 +1,19 @@
+<%- header ? include("./templates/main") : "" %>
+<% if (header) { %>
+	<body>
+<% } %>
+	<div id="join" class="background"></div>
+	<div id="join" class="container">
+		<div id="form">
+			<div id="title">
+				<% for (let i = 0; i < appName.split("").length; i++) { %>
+					<span><%= appName.split("")[i] %></span>
+				<% } %>
+			</div>
+			<input id="game-code" type="number" placeholder="Game Code" />
+			<div id="join-game" class="button accent">Join</div>
+		</div>
+	</div>
+<% if (header) { %>
+	</body>
+<% } %>

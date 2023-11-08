@@ -1,0 +1,111 @@
+#account.container #form #title {
+	transform: scale(1.3);
+	padding: 0;
+	margin-top: -5px;
+	margin-bottom: -5px;
+	box-sizing: border-box;
+	margin: 0;
+}
+
+#account.container {
+	background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("images/lines.png") repeat 0 0;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#account.container #cont {
+	width: 100%;
+}
+
+#account.container #form {
+	min-width: 38%;
+	height: fit-content;
+	padding: 22px 0 22px;
+	border-radius: 7px;
+	background: white;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+	gap: 15px;
+}
+
+#account.container #bar {
+	overflow: hidden;
+	width: 100%;
+	box-sizing: border-box;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	background: #e6e6e6;
+	height: 1px;
+	border: none;
+}
+
+#account.container #span {
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	width: 100%;
+}
+
+#account.container h3 {
+	width: 100%;
+	box-sizing: border-box;
+	text-align: left;
+}
+
+#account input[type="email"], #account #google-button {
+	font-family: "Product Sans";
+	font-size: 15px;
+	height: 40px;
+	outline: none;
+	border-radius: 5px;
+	width: 100%;
+	border: 1px solid #c7c7c7;
+	background: #ffffff;
+	color: #000000;
+	padding: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+	box-sizing: border-box;
+	letter-spacing: 0.5px;
+	transition: border-color 0.21s, outline 0.2s;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	outline: 2px solid #ffffff;
+}
+
+#account input[type="email"]:focus, #account input[type="email"]:hover, #account #google-button:focus, #account #google-button:hover {
+	border-color: var(--theme-button);
+}
+
+#account input[type="email"]:focus, #account #google-button:focus {
+	outline-color: #ebf3ff;
+}
+
+#account #continue {
+	box-sizing: border-box;
+	width: 100%;
+}
+
+#account #google {
+	height: 18px;
+	margin-right: 8px;
+}
+
+#account #google-button {
+	width: fit-content;
+	letter-spacing: 0px;
+	font-weight: 200;
+	padding-left: 20px;
+	padding-right: 20px;
+}
