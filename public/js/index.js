@@ -27,7 +27,7 @@ const updateURL = (url, set) => {
 	if (set) window.history.pushState({}, "", url);
 	const p = url.replaceAll("/", "").replace("signup", "sign up");
 	const d = p.replace(/(^\w{1})|(\s+\w{1})/g, l => l.toUpperCase());
-	document.title = window.location.pathname == "/join" ? "Play " + appName + "! Enter game code here | " + appName : d ? d + " | " + appName : url.split("?")[0].endsWith("/") ? appName + " - live learning game show" : appName;
+	document.title = window.location.pathname == "/join" ? "Play " + appName + "! - Enter game code here | " + appName : d ? d + " | " + appName : url.split("?")[0].endsWith("/") ? appName + " - live learning game show" : appName;
 }
 
 const validateEmail = e => {
@@ -62,7 +62,22 @@ const checkGamecodeOrUsername = e => {
 	if (gamecode) {
 		const name = g.value;
 		if (socket) socket.emit("joinGame", { name }, room => {
-			alert(room.gamecode);
+			f.style.transform = "scale(0.95)";
+			f.style.opacity = 0;
+			setTimeout(async () => {
+				const data = await fetch("/player", {
+					method: "POST",
+					body: JSON.stringify({ header: false }),
+					headers: {
+						"Content-Type": "application/json",
+					},
+				});
+				document.body.innerHTML = await data.text();
+				const c = document.querySelector("#cont");
+				c.onclick = e => {
+					c.style.display = "none";
+				};
+			}, 500);
 		});
 	} else {
 		if (socket) socket.emit("checkGamecode", { gamecode: g.value }, val => {

@@ -15,7 +15,7 @@ const clean = {
 };
 
 const appName = process.env.REPL_SLUG || "Gemkit";
-const gameModes = [];
+const gameModes = ["classic"];
 const path = {
 	css: "css/",
 	js: "js/",
@@ -34,7 +34,7 @@ console.log(gc)
 
 const rooms = {
 	[gc]: {
-		host: false,
+		host: null,
 		players: {},
 		gamecode: gc,
 		gameMode: gameModes[0],
@@ -129,7 +129,6 @@ io.on("connection", socket => {
 			name: user.name,
 			id: socket.id,
 		});
-		console.log(rooms[user.room]);
 		cb(rooms[user.room]);
 	});
 

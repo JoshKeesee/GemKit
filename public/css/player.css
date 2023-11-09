@@ -1,0 +1,71 @@
+#container.player {
+	padding: 0;
+	margin: 0;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background: #52b757;
+	display: flex;
+	justify-content: center;
+	padding-top: 60px;
+}
+
+#container.player #cont {
+	font-family: "Product Sans";
+	margin-top: 20px;
+	background: rgba(0, 0, 0, 0.65);
+	border-radius: 8px;
+	padding: 25px 20px 25px;
+	height: fit-content;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	user-select: none;
+	cursor: pointer;
+	max-width: 560px;
+	width: 100%;
+	box-shadow: 0px 4px 33px -6px rgba(0, 0, 0, 0.46);
+}
+
+#container.player #cont h1 {
+	font-family: "Rubik";
+	color: #ffffff;
+	font-size: 35px;
+	font-weight: 600;
+	text-align: center;
+	margin-bottom: 5px;
+}
+
+#container.player #cont * {
+	text-align: center;
+	color: #ffffff;
+}
+
+#container.player #cont div {
+	text-align: left;
+	padding: 10px 15px 10px;
+	border: 2px solid #ffffff;
+	border-radius: 5px;
+	box-sizing: border-box;
+	height: 70px;
+	font-weight: 600;
+	display: flex;
+	font-size: 17px;
+	gap: 15px;
+	align-items: center;
+	background: rgba(255, 255, 255, 0.01);
+}
+
+#container.player #cont svg {
+	width: 35px;
+	height: 35px;
+}
+
+#container.player #cont p {
+	font-size: 17px;
+	margin: 0;
+	font-weight: 600;
+	color: #ababab;
+}
