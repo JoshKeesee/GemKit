@@ -1,10 +1,11 @@
-let loading = false;
+let loading = false, socket;
 
 const redirect = async e => {
-	e.preventDefault();
+	if (typeof e == "object") e.preventDefault();
 	if (loading) return;
 	loading = true;
-	const url = e.target.href;
+	const url = typeof e == "object" ? e.target.href : e;
+	if (window.location.href == url) return;
 	const ti = setTimeout(() => window.location.href = url, 5000);
 	const data = await fetch(url, {
 		method: "POST",
@@ -59,37 +60,53 @@ const checkGamecodeOrUsername = e => {
 	if (g.value.length == 0) return;
 	const f = document.querySelector("#form");
 	if (gamecode) {
-		const username = g.value;
+		const name = g.value;
+		if (socket) socket.emit("joinGame", { name }, room => {
+			alert(room.gamecode);
+		});
 	} else {
-		gamecode = g.value;
-		f.style.transform = "scale(0.95)";
-		f.style.opacity = 0;
-		setTimeout(() => {
-			g.value = "";
-			g.type = "text";
-			g.placeholder = "Name";
-			f.style = "";
-		}, 500);
+		if (socket) socket.emit("checkGamecode", { gamecode: g.value }, val => {
+			if (!val) return;
+			gamecode = g.value;
+			f.style.transform = "scale(0.95)";
+			f.style.opacity = 0;
+			setTimeout(() => {
+				g.blur();
+				g.value = "";
+				g.type = "text";
+				g.placeholder = "Your Name";
+				f.style = "";
+			}, 500);
+		});
 	}
 };
 
 const updateJoin = () => {
-	if (window.location.pathname != "/join") return;
+	if (window.location.pathname != "/join") return document.querySelector("meta[name='theme-color']").setAttribute("content", "#000000");
+	socket = io();
 	gamecode = false;
 	document.querySelector("#join-game").onclick = checkGamecodeOrUsername;
 	document.querySelector("#game-code").onkeyup = e => e.key == "Enter" ? checkGamecodeOrUsername() : "";
+	document.querySelector("meta[name='theme-color']").setAttribute("content", "#4252af");
 };
 
 const update = () => {
 	document.querySelectorAll("a").forEach(e => e.onclick = redirect);
+	document.querySelectorAll("#menu svg").forEach(e => e.onclick = toggleMenu);
+	document.querySelectorAll("#close-menu").forEach(e => e.onclick = toggleMenu);
+	document.querySelectorAll(".menu-bg").forEach(e => e.onclick = toggleMenu);
 	updateLogin();
 	updateJoin();
-}
+};
+
+const toggleMenu = () => {
+	const m = document.querySelector("#nav.menu");
+	m.classList.toggle("toggled");
+};
 
 window.onload = () => update();
 window.onpopstate = () => {
-	window.history.replaceState({}, "", document.referrer);
-	window.location = document.referrer;
+	redirect(document.referrer);
 };
 
 updateURL(window.location.pathname, false);

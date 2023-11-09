@@ -5,6 +5,8 @@ const server = require("http").createServer(app);
 const port = process.env.PORT || 3000;
 const io = require("socket.io")(server);
 require("ejs");
+const db = require("@jkeesee/json-db");
+db.condense();
 const fs = require("fs");
 const minify = require("@node-minify/core");
 const clean = {
@@ -18,6 +20,27 @@ const path = {
 	css: "css/",
 	js: "js/",
 	icon: "images/icon.png",
+};
+
+const generateGamecode = () => {
+	const chars = "0123456789";
+	let code = "";
+	for (let i = 0; i < 6; i++) code += chars[Math.floor(Math.random() * chars.length)];
+	return code;
+};
+
+const gc = generateGamecode();
+console.log(gc)
+
+const rooms = {
+	[gc]: {
+		host: false,
+		players: {},
+		gamecode: gc,
+		gameMode: gameModes[0],
+		started: false,
+		ended: false,
+	},
 };
 
 app.set("views", "./public/pages");
@@ -51,6 +74,7 @@ const render = (req, res) => {
 };
 
 app.get("/", render);
+app.post("/", render);
 app.get("/:path", render);
 app.post("/:path", render);
 
@@ -75,7 +99,50 @@ compile(path.css, "min.css", "CSS");
 compile(path.js, "min.js", "JS");
 
 io.on("connection", socket => {
-	console.log("New connection");
+	const user = { room: null, name: null, host: false };
+	
+	socket.on("hostGame", (data, cb) => {
+		if (user.room) return;
+		const gamecode = generateGamecode();
+		user.host = true;
+		user.room = gamecode;
+		socket.join(gamecode);
+		rooms[gamecode] = {
+			host: socket.id,
+			players: {},
+			gamecode,
+			gameMode: data.mode || gameModes[0],
+			started: false,
+			ended: false,
+		};
+		console.log(rooms[gamecode]);
+		cb(rooms[gamecode]);
+	});
+
+	socket.on("joinGame", (data, cb) => {
+		const name = data.name;
+		if (!name || !user.room) return;
+		user.name = name;
+		socket.join(user.room);
+		rooms[user.room].players[socket.id] = user;
+		socket.to(rooms[user.room].host).emit("playerJoin", {
+			name: user.name,
+			id: socket.id,
+		});
+		console.log(rooms[user.room]);
+		cb(rooms[user.room]);
+	});
+
+	socket.on("checkGamecode", (data, cb) => {
+		const gamecode = data.gamecode;
+		if (!rooms[gamecode]?.ended) {
+			user.room = gamecode;
+			cb(rooms[gamecode]);
+		} else {
+			user.room = user.name = null;
+			cb(false);
+		}
+	});
 });
 
 server.listen(port, () => console.log(`Server listening on port ${port}`));

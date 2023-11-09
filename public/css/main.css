@@ -24,6 +24,7 @@ body, html {
 	width: 100%;
 	height: 100%;
 	background: rgb(253, 250, 250);
+	position: relative;
 }
 
 #header {
@@ -38,11 +39,32 @@ body, html {
 	backdrop-filter: blur(4px);
 	padding: 10px 25px 10px;
 	gap: 10px;
-	overflow: hidden;
 	align-items: center;
 	justify-content: center;
 	text-align: center;
 	border-bottom: 1px solid var(--header-border);
+}
+
+#menu {
+	display: none;
+}
+
+#menu svg {
+	cursor: pointer;
+	width: 16px;
+	height: 16px;
+	fill: var(--theme-text);
+	transition: background 0.2s ease-in-out;
+	padding: 8px;
+	border-radius: 6px;
+}
+
+#menu svg:hover {
+	background: rgba(235, 235, 235, 0.85);
+}
+
+#nav.menu {
+	display: none;
 }
 
 #footer {
@@ -96,6 +118,14 @@ body, html {
 	margin-left: 20px;
 	margin-right: 20px;
 	background: var(--header-border);
+}
+
+.divider.horizontal {
+	width: 100%;
+	height: 1px;
+	margin: 0;
+	margin-top: 20px;
+	margin-bottom: 20px;
 }
 
 #title span:nth-child(2), #title span:nth-last-child(2) {
@@ -205,10 +235,82 @@ body, html {
 }
 
 @media screen and (max-width: 800px) {
+	#nav #group-pricing, .divider.h {
+		display: none;
+	}
+	#nav .button {
+		width: fit-content;
+	}
+}
+
+@media screen and (max-width: 600px) {
 	#header {
 		padding: 5px 25px 5px;
 	}
 	#header #nav, #nav #group-pricing, .divider.h {
 		display: none;
+	}
+	#nav.menu {
+		display: flex;
+		background: var(--theme-main);
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		right: -100%;
+		width: calc(100vw - 40px);
+		align-items: flex-start;
+		justify-content: flex-start;
+		z-index: 3;
+		flex-direction: column;
+		overflow: hidden;
+		transition: right 0.35s;
+		box-sizing: border-box;
+	}
+	#nav.menu.toggled {
+		right: 0;
+	}
+	#nav.menu + .menu-bg {
+		display: block;
+		position: fixed;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		pointer-events: none;
+		transition: background 0.35s;
+		z-index: 2;
+	}
+	#nav.menu.toggled + .menu-bg {
+		pointer-events: auto;
+		background: rgba(0, 0, 0, 0.5);
+	}
+	#nav.menu .button {
+		width: fit-content;
+	}
+	#close-menu {
+		user-select: none;
+		cursor: pointer;
+		padding: 10px 25px 0;
+		margin-bottom: -10px;
+		font-size: 25px;
+		font-weight: 100;
+		color: #858585;
+		transition: color 0.2s ease-in-out;
+	}
+	#close-menu:hover {
+		color: #000000;
+	}
+	#nav #cont {
+		width: 100%;
+		padding-left: 20px;
+		padding-right: 20px;
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		box-sizing: border-box;
+		overflow: hidden;
+	}
+	#menu {
+		display: block;
 	}
 }
