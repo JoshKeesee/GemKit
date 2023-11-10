@@ -55,6 +55,100 @@ const updateLogin = () => {
 
 let gamecode = false;
 
+const setupCanvas = d => {
+	const ctx = d.getContext("2d");
+	const colors = {
+		erase: "#52b757",
+		draw: "#1d2d35",
+		default: "#ffffff",
+	};
+	const c0 = document.querySelector("#color-0"), c1 = document.querySelector("#color-1"), pe = document.querySelector("#pen"), ma = document.querySelector("#marker"), er = document.querySelector("#eraser");
+	c0.querySelector(".color").style.background = colors.draw;
+	c1.querySelector(".color").style.background = colors.default;
+	const pen = { x: 0, y: 0, click: false, curr: colors.draw, w: 10, h: 10 };
+	c0.onclick = () => {
+		c0.classList.add("toggled");
+		c1.classList.remove("toggled");
+		pen.curr = colors.draw;
+	};
+	c1.onclick = () => {
+		c1.classList.add("toggled");
+		c0.classList.remove("toggled");
+		pen.curr = colors.default;
+	};
+	pe.onclick = () => {
+		pe.classList.add("toggled");
+		ma.classList.remove("toggled");
+		er.classList.remove("toggled");
+		pen.w = pen.h = 10;
+		if (pen.curr == colors.erase) {
+			pen.curr = colors.draw;
+			c0.classList.add("toggled");
+		}
+	};
+	ma.onclick = () => {
+		ma.classList.add("toggled");
+		pe.classList.remove("toggled");
+		er.classList.remove("toggled");
+		pen.w = pen.h = 15;
+		if (pen.curr == colors.erase) {
+			pen.curr = colors.draw;
+			c0.classList.add("toggled");
+		}
+	};
+	er.onclick = () => {
+		er.classList.add("toggled");
+		pe.classList.remove("toggled");
+		ma.classList.remove("toggled");
+		c0.classList.remove("toggled");
+		c1.classList.remove("toggled");
+		pen.w = pen.h = 10;
+		pen.curr = colors.erase;
+	};
+	const spots = [];
+	const handleMouseMove = e => {
+		pen.x = e.touches ? e.touches[0].clientX : e.clientX;
+		pen.y = e.touches ? e.touches[0].clientY : e.clientY;
+		if (pen.click) spots.push(structuredClone(pen));
+	};
+	const c = document.querySelector("#container");
+	c.onmousemove = handleMouseMove;
+	c.ontouchmove = handleMouseMove;
+	c.onmousedown = () => { pen.click = true; spots.push(structuredClone(pen)) };
+	c.ontouchstart = () => { pen.click = true; spots.push(structuredClone(pen)) };
+	c.onmouseup = () => { pen.click = false; spots.push(false) };
+	c.ontouchend = () => { pen.click = false; spots.push(structuredClone(false)) };
+	const animate = () => {
+		requestAnimationFrame(animate);
+		d.width = window.innerWidth;
+		d.height = window.innerHeight;
+		ctx.clearRect(0, 0, d.width, d.height);
+		ctx.beginPath();
+		ctx.fillStyle = pen.curr;
+		ctx.arc(pen.x, pen.y, pen.w, pen.h, 0, 2 * Math.PI);
+		ctx.fill();
+		ctx.closePath();
+		spots.forEach((a, i) => {
+			const b = spots[i + 1];
+			ctx.beginPath();
+			ctx.fillStyle = a.curr;
+			ctx.arc(a.x, a.y, a.w, a.h, 0, 2 * Math.PI);
+			ctx.fill();
+			ctx.closePath();
+			if (b) {
+				ctx.beginPath();
+				ctx.strokeStyle = a.curr;
+				ctx.lineWidth = a.w * 2;
+				ctx.moveTo(a.x, a.y)
+				ctx.lineTo(b.x, b.y);
+				ctx.stroke();
+				ctx.closePath();
+			}
+		});
+	};
+	animate();
+};
+
 const checkGamecodeOrUsername = e => {
 	const g = document.querySelector("#game-code");
 	if (g.value.length == 0) return;
@@ -76,6 +170,9 @@ const checkGamecodeOrUsername = e => {
 				const c = document.querySelector("#cont");
 				c.onclick = e => {
 					c.style.display = "none";
+					document.querySelector("#draw-dock").style.display = "flex";
+					const d = document.querySelector("#draw");
+					setupCanvas(d);
 				};
 			}, 500);
 		});

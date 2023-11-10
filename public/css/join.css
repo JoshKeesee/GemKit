@@ -1,6 +1,9 @@
+body:has(#join.container), html:has(#join.container) {
+	background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("images/background.png") repeat 0 0;
+}
+
 #join.container {
 	position: absolute;
-	background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("images/background.png") repeat 0 0;
 	top: 0;
 	bottom: 0;
 	left: 0;
