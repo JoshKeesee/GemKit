@@ -1,4 +1,4 @@
-html:has(#account.container) {
+html:has(#account.container), body:has(#account.container) {
 	background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url("images/lines.png") repeat 0 0;
 }
 
@@ -29,7 +29,7 @@ html:has(#account.container) {
 #account.container #form {
 	min-width: 38%;
 	height: fit-content;
-	padding: 22px 0 22px;
+	padding: 30px 33px 30px;
 	border-radius: 7px;
 	background: white;
 	display: flex;

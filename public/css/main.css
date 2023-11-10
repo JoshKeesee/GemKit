@@ -207,6 +207,18 @@ body, html {
 	filter: brightness(150%);
 }
 
+.green {
+	color: #008000;
+}
+
+.orange {
+	color: #ffa500;
+}
+
+.red {
+	color: #ff0000;
+}
+
 #sign-up.button {
 	margin-top: 4px;
 	font-size: 16px;

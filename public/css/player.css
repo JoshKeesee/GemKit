@@ -75,19 +75,20 @@ body:has(#container.player), html:has(#container.player) {
 	color: #ababab;
 }
 
-#container.player #draw {
+#draw, #pen-c {
 	position: absolute;
-	width: 100vw;
-	height: 100vh;
 	z-index: 1;
 	top: 0;
 	bottom: 0;
 	left: 0;
 	right: 0;
+}
+
+#pen-c {
 	pointer-events: none;
 }
 
-#container.player #draw-dock {
+#draw-dock {
 	display: none;
 	position: fixed;
 	bottom: 0;
@@ -98,7 +99,7 @@ body:has(#container.player), html:has(#container.player) {
 	justify-content: center;
 }
 
-#container.player #draw-dock #dock {
+#draw-dock #dock {
 	width: fit-content;
 	height: 55px;
 	background: #ffffff;
@@ -111,7 +112,7 @@ body:has(#container.player), html:has(#container.player) {
 	margin-bottom: 20px;
 }
 
-#container.player #draw-dock #dock .bar {
+#draw-dock #dock .bar {
 	width: 5px;
 	height: 35px;
 	margin-left: 10px;
@@ -119,25 +120,26 @@ body:has(#container.player), html:has(#container.player) {
 	background: #878787;
 }
 
-#container.player #draw-dock #dock .b {
+#draw-dock #dock .b {
 	border-radius: 5px;
 	padding: 12px 10px 12px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	transition: background 0.2s;
+	cursor: pointer;
 }
 
-#container.player #draw-dock #dock .b.toggled {
-	background: rgba(128, 128, 128, 0.1);
+#draw-dock #dock .b.toggled {
+	background: rgba(128, 128, 128, 0.3);
 }
 
-#container.player #draw-dock #dock .b .color {
+#draw-dock #dock .b .color {
 	border-radius: 30px;
 	border: 1px solid #000000;
 }
 
-#container.player #draw-dock #dock .b * {
+#draw-dock #dock .b * {
 	width: 30px;
 	height: 30px;
 }

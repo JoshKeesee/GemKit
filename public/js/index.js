@@ -25,9 +25,9 @@ const redirect = async e => {
 
 const updateURL = (url, set) => {
 	if (set) window.history.pushState({}, "", url);
-	const p = url.replaceAll("/", "").replace("signup", "sign up");
+	const p = url.replaceAll("/", " ").replace("signup", "sign up");
 	const d = p.replace(/(^\w{1})|(\s+\w{1})/g, l => l.toUpperCase());
-	document.title = window.location.pathname == "/join" ? "Play " + appName + "! - Enter game code here | " + appName : d ? d + " | " + appName : url.split("?")[0].endsWith("/") ? appName + " - live learning game show" : appName;
+	document.title = window.location.pathname == "/join" ? "Play " + appName + "! - Enter game code here | " + appName : d && p != " " ? d + " | " + appName : url.split("?")[0].endsWith("/") ? appName + " - live learning game show" : appName;
 }
 
 const validateEmail = e => {
@@ -66,14 +66,33 @@ const setupCanvas = d => {
 	c0.querySelector(".color").style.background = colors.draw;
 	c1.querySelector(".color").style.background = colors.default;
 	const pen = { x: 0, y: 0, click: false, curr: colors.draw, w: 10, h: 10 };
+	const pctx = document.querySelector("#pen-c").getContext("2d");
+	d.width = screen.width;
+	d.height = screen.height;
+	pctx.canvas.width = screen.width;
+	pctx.canvas.height = screen.height;
+	window.onresize = () => {
+		d.width = screen.width;
+		d.height = screen.height;
+	};
 	c0.onclick = () => {
 		c0.classList.add("toggled");
 		c1.classList.remove("toggled");
+		if (pen.curr == colors.erase) {
+			pen.w = pen.h = 10;
+			er.classList.remove("toggled");
+			pe.classList.add("toggled");
+		}
 		pen.curr = colors.draw;
 	};
 	c1.onclick = () => {
 		c1.classList.add("toggled");
 		c0.classList.remove("toggled");
+		if (pen.curr == colors.erase) {
+			pen.w = pen.h = 10;
+			er.classList.remove("toggled");
+			pe.classList.add("toggled");
+		}
 		pen.curr = colors.default;
 	};
 	pe.onclick = () => {
@@ -102,54 +121,57 @@ const setupCanvas = d => {
 		ma.classList.remove("toggled");
 		c0.classList.remove("toggled");
 		c1.classList.remove("toggled");
-		pen.w = pen.h = 10;
+		pen.w = pen.h = 18;
 		pen.curr = colors.erase;
 	};
-	const spots = [];
+	let a, b;
 	const handleMouseMove = e => {
+		if (b) b = structuredClone(pen);
 		pen.x = e.touches ? e.touches[0].clientX : e.clientX;
 		pen.y = e.touches ? e.touches[0].clientY : e.clientY;
-		if (pen.click) spots.push(structuredClone(pen));
-	};
-	const c = document.querySelector("#container");
-	c.onmousemove = handleMouseMove;
-	c.ontouchmove = handleMouseMove;
-	c.onmousedown = () => { pen.click = true; spots.push(structuredClone(pen)) };
-	c.ontouchstart = () => { pen.click = true; spots.push(structuredClone(pen)) };
-	c.onmouseup = () => { pen.click = false; spots.push(false) };
-	c.ontouchend = () => { pen.click = false; spots.push(structuredClone(false)) };
-	const animate = () => {
-		requestAnimationFrame(animate);
-		d.width = window.innerWidth;
-		d.height = window.innerHeight;
-		ctx.clearRect(0, 0, d.width, d.height);
+		pctx.clearRect(0, 0, pctx.canvas.width, pctx.canvas.height);
+		pctx.beginPath();
+		pctx.fillStyle = pen.curr;
+		pctx.arc(pen.x, pen.y, pen.w, 0, 2 * Math.PI);
+		pctx.fill();
+		pctx.closePath();
+		if (pen.y > window.innerHeight - 95) return pen.click = b = false;
+		a = pen;
+		if (!pen.click) return;
+		if (!b) b = structuredClone(pen);
 		ctx.beginPath();
-		ctx.fillStyle = pen.curr;
-		ctx.arc(pen.x, pen.y, pen.w, pen.h, 0, 2 * Math.PI);
+		ctx.strokeStyle = a.curr;
+		ctx.lineWidth = a.w * 2;
+		ctx.moveTo(a.x, a.y)
+		ctx.lineTo(b.x, b.y);
+		ctx.stroke();
+		ctx.closePath();
+		ctx.beginPath();
+		ctx.fillStyle = a.curr;
+		ctx.arc(a.x, a.y, a.w, 0, 2 * Math.PI);
 		ctx.fill();
 		ctx.closePath();
-		spots.forEach((a, i) => {
-			const b = spots[i + 1];
-			ctx.beginPath();
-			ctx.fillStyle = a.curr;
-			ctx.arc(a.x, a.y, a.w, a.h, 0, 2 * Math.PI);
-			ctx.fill();
-			ctx.closePath();
-			if (b) {
-				ctx.beginPath();
-				ctx.strokeStyle = a.curr;
-				ctx.lineWidth = a.w * 2;
-				ctx.moveTo(a.x, a.y)
-				ctx.lineTo(b.x, b.y);
-				ctx.stroke();
-				ctx.closePath();
-			}
-		});
 	};
-	animate();
+	d.onmousemove = d.ontouchmove = handleMouseMove;
+	d.onmousedown = d.ontouchstart = () => {
+		pen.click = true;
+		ctx.beginPath();
+		ctx.fillStyle = pen.curr;
+		ctx.arc(pen.x, pen.y, pen.w, 0, 2 * Math.PI);
+		ctx.fill();
+		ctx.closePath();
+	};
+	d.onmouseup = d.ontouchend = () => {
+		pen.click = b = false;
+		ctx.beginPath();
+		ctx.fillStyle = pen.curr;
+		ctx.arc(pen.x, pen.y, pen.w, 0, 2 * Math.PI);
+		ctx.fill();
+		ctx.closePath();
+	};
 };
 
-const checkGamecodeOrUsername = e => {
+const checkGamecodeOrUsername = () => {
 	const g = document.querySelector("#game-code");
 	if (g.value.length == 0) return;
 	const f = document.querySelector("#form");
@@ -197,9 +219,16 @@ const updateJoin = () => {
 	if (window.location.pathname != "/join") return document.querySelector("meta[name='theme-color']").setAttribute("content", "#000000");
 	socket = io();
 	gamecode = false;
-	document.querySelector("#join-game").onclick = checkGamecodeOrUsername;
+	document.querySelector("#join-game").onclick = () => checkGamecodeOrUsername();
 	document.querySelector("#game-code").onkeyup = e => e.key == "Enter" ? checkGamecodeOrUsername() : "";
 	document.querySelector("meta[name='theme-color']").setAttribute("content", "#4252af");
+	const q = window.location.search;
+	const params = new URLSearchParams(q);
+	const gc = params.get("gc");
+	if (gc) {
+		document.querySelector("#game-code").value = gc;
+		checkGamecodeOrUsername();
+	}
 };
 
 const update = () => {

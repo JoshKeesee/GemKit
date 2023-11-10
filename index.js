@@ -14,12 +14,13 @@ const clean = {
 	"JS": require("@node-minify/terser"),
 };
 
+const pages = fs.readdirSync("./public/pages").filter(e => e.endsWith(".ejs")).map(e => e.replace(".ejs", ""));
 const appName = process.env.REPL_SLUG || "Gemkit";
 const gameModes = ["classic"];
 const path = {
 	css: "css/",
 	js: "js/",
-	icon: "images/icon.png",
+	icon: "/../images/icon.png",
 };
 
 const generateGamecode = () => {
@@ -51,25 +52,20 @@ app.use(bodyParser.json());
 const render = (req, res) => {
 	let p = "index";
 	if (req.params.path != "undefined" && req.params.path != "" && req.params.path) p = req.params.path;
+	if (req.params.folder != "undefined" && req.params.folder != "" && req.params.folder) p = req.params.folder + "/" + p;
 	try {
 		res.sendFile(p);
 	} catch (e) {
-		try {
-			res.render(p, {
-				icon: path.icon,
-				appName,
-				gameModes,
-				header: req.body.header || true,
-		 });
-		} catch (e) {
-			p = "error";
-			res.render(p, {
-				icon: path.icon,
-				appName,
-				gameModes,
-				header: false,
-			});
-		}
+		const gameurls = ["player", "game", "play"];
+		if (gameurls.includes(p) && req.body.header) return res.status(201).redirect("/join");
+		if (pages.includes(p)) res.render(p, {
+			icon: path.icon,
+			appName,
+			gameModes,
+			header: req.body.header || true,
+			status: "green",
+		});
+		else res.status(201).redirect("/error");
 	}
 };
 
@@ -77,6 +73,8 @@ app.get("/", render);
 app.post("/", render);
 app.get("/:path", render);
 app.post("/:path", render);
+app.get("/:folder/:path", render);
+app.post("/:folder/:path", render);
 
 const compile = (dir, output, type) => {
 	let compressed = "";
