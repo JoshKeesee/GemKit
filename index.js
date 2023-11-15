@@ -85,6 +85,7 @@ const render = (req, res) => {
 		const accounturls = ["email", "password"];
 		const meurls = ["me", "kits", "assignments", "classes"];
 		const userurls = meurls.concat(["creative", "rewards"]);
+		const darkurls = ["creative", "rewards"];
 		if (userurls.includes(p) && !req.user) return res.status(201).redirect("/login");
 		if (gameurls.includes(p) && req.body.header) return res.status(201).redirect("/join");
 		if (!userurls.includes(p) && !gameurls.includes(p) && p != "join" && p != "error" && req.user) return res.status(201).redirect("/me");
@@ -132,6 +133,7 @@ const render = (req, res) => {
 			account,
 			status: "green",
 			url: p,
+			dark: darkurls.includes(p),
 		});
 		else res.status(201).redirect("/error");
 	}

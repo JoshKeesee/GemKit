@@ -1,0 +1,53 @@
+	<%- header ? include("./templates/main") : "" %>
+	<%- account ? include("./templates/dashboard-header") : include("./templates/header") %>
+	<% if (header) { %>
+		<body>
+	<% } %>
+		<div id="container" class="creative">
+			<div id="cont">
+				<%- include("./templates/title") %>
+				<h1>CREATIVE</h1>
+				<p>
+					Welcome to <%= appName %> Creative, where you can build your very own game modes, maps, & worlds! Creative is in early access, so there may be bugs & issues. Have fun building!
+				</p>
+				<div id="section" class="first">
+					<div class="flex">
+						<div class="flex col">
+							<h2>MY MAPS</h2>
+							<p>0/3 slots used</p>
+						</div>
+						<div id="cool-button">Create New Map</div>
+					</div>
+					<div id="my-maps">
+						<div>You haven't built any maps yet. Click the <b id="yellow">Create New Map</b> button above to get started.</div>
+					</div>
+				</div>
+				<div id="section">
+					<h2>RESOURCES</h2>
+					<div id="section" class="flex sm">
+						<div class="flex col">
+							<u>Changelog</u>
+							<p>Read about the latest updates to <%= appName %> Creative!</p>
+						</div>
+						<i class="fas fa-external-link"></i>
+					</div>
+					<div id="section" class="flex sm">
+						<div class="flex col">
+							<u>Community Forum</u>
+							<p>Ask questions and get help building your own maps!</p>
+						</div>
+						<i class="fas fa-external-link"></i>
+					</div>
+					<div id="section" class="flex sm">
+						<div class="flex col">
+							<u>Documentation</u>
+							<p>Documentation to help you build your own maps.</p>
+						</div>
+						<i class="fas fa-external-link"></i>
+					</div>
+				</div>
+			</div>
+		</div>
+	<% if (header) { %>
+		</body>
+	<% } %>

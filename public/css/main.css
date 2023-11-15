@@ -8,6 +8,8 @@
 :root {
 	--theme-font: "Rubik", sans-serif;
 	--header-bg: rgba(255, 255, 255, 0.85);
+	--header-dark-bg: rgba(20, 20, 20, 0.45);
+	--header-dark-border: rgb(100, 100, 100);
 	--header-border: rgb(235, 235, 235);
 	--theme-main: white;
 	--theme-main-accent: #1E076B;
@@ -44,6 +46,19 @@ body, html {
 	justify-content: center;
 	text-align: center;
 	border-bottom: 1px solid var(--header-border);
+}
+
+#header.dark {
+	background: var(--header-dark-bg);
+	border-color: var(--header-dark-border);
+}
+
+#header.dark * {
+	color: var(--theme-accent-text);
+}
+
+#header.dark *:hover {
+	color: var(--theme-accent-text);
 }
 
 #header .button, .menu .button {

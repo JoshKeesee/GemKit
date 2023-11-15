@@ -27,7 +27,7 @@ const updateURL = (url, set) => {
 	if (set) window.history.pushState({}, "", url);
 	const p = url.replaceAll("/", " ").replace("signup", "sign up");
 	const d = p.replace(/(^\w{1})|(\s+\w{1})/g, l => l.toUpperCase());
-	document.title = window.location.pathname == "/me" || window.location.pathname == "/kits" ? "Dashboard | " + appName : window.location.pathname == "/join" ? "Play " + appName + "! - Enter game code here | " + appName : d && p != " " ? d + " | " + appName : url.split("?")[0].endsWith("/") ? appName + " - live learning game show" : appName;
+	document.title = window.location.pathname == "/creative" ? appName + " Creative" : window.location.pathname == "/me" || window.location.pathname == "/kits" ? "Dashboard | " + appName : window.location.pathname == "/join" ? "Play " + appName + "! - Enter game code here | " + appName : d && p != " " ? d + " | " + appName : url.split("?")[0].endsWith("/") ? appName + " - live learning game show" : appName;
 }
 
 const validateEmail = e => {
