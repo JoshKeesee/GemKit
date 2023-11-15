@@ -1,0 +1,43 @@
+#container.no-data {
+	max-width: 594px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	margin-left: auto;
+	margin-right: auto;
+	padding: 160px 20px 20px;
+}
+
+#container.no-data p {
+	font-size: 18px;
+	line-height: 1.5;
+	text-align: center;
+	font-weight: 500;
+	max-width: 530px;
+	margin-top: -5px;
+	font-family: "Product Sans";
+}
+
+#container.no-data h1 {
+	font-size: 60px;
+	line-height: 1.5;
+	font-family: "Product Sans";
+}
+
+#container.no-data .button.lg {
+	font-size: 18px;
+	margin-top: 13px;
+	width: fit-content;
+	gap: 10px;
+	padding: 13px 19px 13px;
+}
+
+#container.no-data .button.lg svg {
+	width: 20px;
+}
+
+#container.no-data img {
+	width: 140px;
+	height: 140px;
+}

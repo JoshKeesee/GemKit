@@ -133,6 +133,10 @@ section.dark p {
 	margin-right: auto;
 }
 
+section.dark .button {
+	box-shadow: none;
+}
+
 section.dark #img {
 	width: 135%;
 }
@@ -158,6 +162,9 @@ section.big.dark p {
 		max-width: 400px;
 		width: 100%;
 		padding: 40px 10px 40px;
+	}
+	.button.rounded {
+		width: fit-content;
 	}
 	#content {
 		margin-top: calc(16px + 70px);

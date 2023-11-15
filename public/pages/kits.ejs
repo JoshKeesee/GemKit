@@ -1,0 +1,22 @@
+<%- header ? include("./templates/main") : "" %>
+<%- account ? include("./templates/dashboard-header") : include("./templates/header") %>
+<% if (header) { %>
+	<body>
+<% } %>
+	<div id="container" class="no-data">
+		<img src="images/kit.svg" />
+		<h1>Kits</h1>
+		<p>
+			Kits are live learning games for your class. They include all the content your students will learn in a game.
+		</p>
+		<div class="button lg">
+			<svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="64 64 896 896" stroke-width="1.5" stroke="white">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M696 480H544V328c0-4.4-3.6-8-8-8h-48c-4.4 0-8 3.6-8 8v152H328c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8h152v152c0 4.4 3.6 8 8 8h48c4.4 0 8-3.6 8-8V544h152c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8z M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z" />
+			</svg>
+			<div>New Kit</div>
+		</div>
+	</div>
+	<%- include("./templates/pro-alert") %>
+<% if (header) { %>
+	</body>
+<% } %>

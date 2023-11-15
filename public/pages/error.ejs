@@ -1,5 +1,5 @@
 <%- header ? include("./templates/main") : "" %>
-<%- include("./templates/header") %>
+<%- account ? include("./templates/dashboard-header") : include("./templates/header") %>
 <% if (header) { %>
 	<body>
 <% } %>
@@ -16,7 +16,7 @@
 		<div><span class="green">Green:</span> Servers Healthy</div>
 		<div><span class="orange">Orange:</span> Servers Slow</div>
 		<div><span class="red">Red:</span> Servers Not Working</div>
-		<a class="button sm" href="/../">Open Status Page</a>
+		<a class="button sm" href="/../<%= account ? 'me' : '' %>">Open Status Page</a>
 	</div>
 <% if (header) { %>
 	</body>

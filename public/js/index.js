@@ -1,11 +1,11 @@
-let loading = false, socket;
+let loading = false, socket, email;
 
 const redirect = async e => {
 	if (typeof e == "object") e.preventDefault();
 	if (loading) return;
-	loading = true;
-	const url = typeof e == "object" ? e.target.href : e;
+	const url = typeof e != "object" ? e : e.target.href ? e.target.href : e.target.parentElement.href;
 	if (window.location.href == url) return;
+	loading = true;
 	const ti = setTimeout(() => window.location.href = url, 5000);
 	const data = await fetch(url, {
 		method: "POST",
@@ -27,7 +27,7 @@ const updateURL = (url, set) => {
 	if (set) window.history.pushState({}, "", url);
 	const p = url.replaceAll("/", " ").replace("signup", "sign up");
 	const d = p.replace(/(^\w{1})|(\s+\w{1})/g, l => l.toUpperCase());
-	document.title = window.location.pathname == "/join" ? "Play " + appName + "! - Enter game code here | " + appName : d && p != " " ? d + " | " + appName : url.split("?")[0].endsWith("/") ? appName + " - live learning game show" : appName;
+	document.title = window.location.pathname == "/me" || window.location.pathname == "/kits" ? "Dashboard | " + appName : window.location.pathname == "/join" ? "Play " + appName + "! - Enter game code here | " + appName : d && p != " " ? d + " | " + appName : url.split("?")[0].endsWith("/") ? appName + " - live learning game show" : appName;
 }
 
 const validateEmail = e => {
@@ -36,20 +36,64 @@ const validateEmail = e => {
 		.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
 };
 
-const signupOrLogin = e => {
-	if (e.target.classList.contains("disabled")) return;
+const login = async e => {
+	if (document.querySelector("#continue").classList.contains("disabled")) return;
+	const password = document.querySelector("#password").value;
+	if (!validateEmail(email) || !password) return;
+	const data = await fetch("/password", {
+		method: "POST",
+		body: JSON.stringify({ email, password }),
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
+	const ac = await data.json();
+	if (ac.error) return alert(ac.error);
+	redirect("/me");
+};
+
+const signupOrLogin = async e => {
+	if (document.querySelector("#continue").classList.contains("disabled")) return;
 	const em = document.querySelector("#email");
 	if (!validateEmail(em.value)) return;
+	email = em.value;
+	const data = await fetch("/email", {
+		method: "POST",
+		body: JSON.stringify({ email }),
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
+	const ac = await data.json();
+	if (ac.error) return alert(ac.error);
+	em.id = "password";
+	em.type = "password";
+	em.placeholder = "Password";
+	em.value = "";
+	const c = document.querySelector("#continue");
+	const p = document.querySelector("#password");
+	p.oninput = () => {
+		if (p.value.length) c.classList.remove("disabled");
+		else c.classList.add("disabled");
+	};
+	p.onkeyup = e => (e.key == "Enter") ? login() : "";
+	c.onclick = login;
+	c.innerText = window.location.pathname == "/signup" ? "Sign Up" : "Login";
+	c.classList.add("disabled");
+	document.querySelector("h3").innerText = "Enter Your Password...";
+	document.querySelector("#google-cont").remove();
 };
 
 const updateLogin = () => {
 	if (window.location.pathname != "/login" && window.location.pathname != "/signup") return;
 	const c = document.querySelector("#continue");
-	document.querySelector("#email").oninput = e => {
+	const em = document.querySelector("#email");
+	em.oninput = e => {
 		const em = validateEmail(e.target.value);
 		if (em) c.classList.remove("disabled");
 		else c.classList.add("disabled");
 	};
+	em.onkeyup = e => (e.key == "Enter") ? signupOrLogin() : "";
 	c.onclick = signupOrLogin;
 };
 

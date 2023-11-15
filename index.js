@@ -1,17 +1,35 @@
+require("ejs");
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
 const server = require("http").createServer(app);
 const port = process.env.PORT || 3000;
 const io = require("socket.io")(server);
-require("ejs");
 const db = require("@jkeesee/json-db");
 db.condense();
 const fs = require("fs");
 const minify = require("@node-minify/core");
+const bcrypt = require("bcrypt");
 const clean = {
 	"CSS": require("@node-minify/clean-css"),
 	"JS": require("@node-minify/terser"),
+};
+
+const User = {
+	create(id, email, password, other) {
+		this.id = id;
+		this.email = email;
+		this.password = password ? bcrypt.hashSync(password, 10) : null;
+		Object.keys(other).forEach(k => this[k] = other[k]);
+	},
+	get(id) {
+		const users = db.get("users") || {};
+		return users[id];
+	},
+	checkEmail(u, e) { return this.email == e },
+	checkPassword(u, p) { return bcrypt.compareSync(p, u.password) },
+	forgotPassword() {},
 };
 
 const pages = fs.readdirSync("./public/pages").filter(e => e.endsWith(".ejs")).map(e => e.replace(".ejs", ""));
@@ -48,6 +66,13 @@ app.set("views", "./public/pages");
 app.set("view engine", "ejs");
 app.use(express.static("./public"));
 app.use(bodyParser.json());
+app.use(cookieParser());
+app.use((req, res, next) => {
+	const id = req.cookies["id"];
+	if (id) req.user = User.get(id);
+	else req.user = null;
+	next();
+});
 
 const render = (req, res) => {
 	let p = "index";
@@ -57,13 +82,56 @@ const render = (req, res) => {
 		res.sendFile(p);
 	} catch (e) {
 		const gameurls = ["player", "game", "play"];
+		const accounturls = ["email", "password"];
+		const meurls = ["me", "kits", "assignments", "classes"];
+		const userurls = meurls.concat(["creative", "rewards"]);
+		if (userurls.includes(p) && !req.user) return res.status(201).redirect("/login");
 		if (gameurls.includes(p) && req.body.header) return res.status(201).redirect("/join");
+		if (!userurls.includes(p) && !gameurls.includes(p) && p != "join" && p != "error" && req.user) return res.status(201).redirect("/me");
+		if (accounturls.includes(p)) {
+			const data = {};
+			const users = db.get("users") || {};
+			data.exists = !Object.keys(users).some(k => {
+				const u = users[k];
+				if (User.checkEmail(u, req.body.email)) return true;
+				return false;
+			});
+			if (p == accounturls[0]) {
+				const em = req.body.email;
+				if (!em) return res.json({ error: "Email is required." });
+				let id = Object.keys(users).length;
+				if (data.exists) users[id] = User.create(id, em, null, { newUser: true });
+				else id = Object.keys(users).find(k => User.checkEmail(users[k], em));
+				data.user = users[id];
+			} else if (p == accounturls[1]) {
+				const pa = req.body.password;
+				if (!pa) return res.json({ error: "Password is required." });
+				const em = req.body.email;
+				if (!em) return res.json({ error: "Email is required." });
+				const id = Object.keys(users).find(k => User.checkEmail(users[k], em));
+				if (!id) return res.json({ error: "Email not found." });
+				const user = User.get(id);
+				if (user.newUser) {
+					user.password = bcrypt.hashSync(pa, 10);
+					user.newUser = false;
+				} else if (!User.checkPassword(user, pa)) return res.json({ error: "Password is incorrect." });
+				data.user = user;
+				res.cookie("id", user.id, { maxAge: 9999999999999, expires: new Date(Date.now() + 9999999999999) });
+			}
+			db.set({ users });
+			return res.json(data);
+		}
+		const account = req.user || false;
+		if (account) delete account.password;
 		if (pages.includes(p)) res.render(p, {
 			icon: path.icon,
 			appName,
 			gameModes,
 			header: req.body.header || true,
+			navbar: meurls.includes(p),
+			account,
 			status: "green",
+			url: p,
 		});
 		else res.status(201).redirect("/error");
 	}

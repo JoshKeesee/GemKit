@@ -14,6 +14,7 @@
 	--theme-button: #1677ff;
 	--theme-text: black;
 	--theme-accent-text: white;
+	--theme-alert: #c62828;
 }
 
 ::-webkit-scrollbar {
@@ -45,6 +46,10 @@ body, html {
 	border-bottom: 1px solid var(--header-border);
 }
 
+#header .button, .menu .button {
+	box-shadow: none;
+}
+
 #menu {
 	display: none;
 }
@@ -65,6 +70,24 @@ body, html {
 
 #nav.menu {
 	display: none;
+}
+
+#navbar {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	right: 0;
+	background: inherit;
+	color: inherit;
+	border: inherit;
+	backdrop-filter: inherit;
+	display: flex;
+	gap: 8px;
+	padding: 8px 25px 8px;
+}
+
+#navbar.b {
+	border-top: 1px solid var(--header-border);
 }
 
 #footer {
@@ -112,6 +135,10 @@ body, html {
 	justify-content: center;
 }
 
+#nav.lg .link {
+	font-size: 18px;
+}
+
 .divider {
 	height: 12px;
 	width: 1px;
@@ -150,9 +177,16 @@ body, html {
 	gap: 5px;
 }
 
-.link i, .button i {
+.link i, .button i, .link svg, .button svg {
 	color: inherit;
+	transition: inherit;
 	font-size: 15px;
+}
+
+.link img, .button img {
+	width: 23px;
+	height: 23px;
+	transition: filter 0.2s ease-in-out;
 }
 
 .button {
@@ -173,6 +207,14 @@ body, html {
 	align-items: center;
 	justify-content: center;
 	gap: 5px;
+	box-shadow: 0px 3px 0 rgb(173, 216, 230, 0.25);
+}
+
+.button div, .link div {
+	color: inherit;
+	transition: inherit;
+	box-sizing: border-box;
+	height: 100%;
 }
 
 .button.disabled {
@@ -180,14 +222,38 @@ body, html {
 	background: #f8f8f8;
 	cursor: not-allowed;
 	color: #c9c9c9;
+	box-shadow: none;
 }
 
 .link svg, .button svg {
 	width: 15px;
 }
 
-.button:not(.disabled):not(#google-button):hover {
+.button:not(.rounded):not(.disabled):not(#google-button):hover {
 	filter: brightness(130%);
+}
+
+.button.rounded {
+	border-radius: 50px;
+	font-size: 15px;
+	font-weight: 400;
+	letter-spacing: -0.5px;
+	padding: 4.5px 10px 4.5px;
+	box-shadow: none;
+}
+
+.button.rounded.selected {
+	color: var(--theme-accent-text);
+	fill: var(--theme-accent-text);
+}
+
+.button.rounded:not(.selected) {
+	background: none;
+	color: var(--theme-text);
+}
+
+.button.rounded:not(.selected):hover {
+	background: var(--header-border);
 }
 
 .button.accent {
@@ -201,9 +267,10 @@ body, html {
 	letter-spacing: 0.5px;
 	text-align: center;
 	font-weight: bold;
+	box-shadow: none;
 }
 
-.link:hover {
+.link:hover div, .link:hover i, .link:hover svg {
 	filter: brightness(150%);
 }
 
@@ -229,6 +296,87 @@ body, html {
 	gap: 12px;
 }
 
+input[type="search"] {
+	font-family: "Product Sans";
+	font-size: 15px;
+	height: 100%;
+	outline: none;
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+	width: 100%;
+	border: 1px solid #c7c7c7;
+	border-right: none;
+	background: #ffffff;
+	color: #000000;
+	padding: 5px;
+	padding-left: 10px;
+	padding-right: 10px;
+	box-sizing: border-box;
+	letter-spacing: 0.5px;
+	transition: border-color 0.21s, outline 0.2s;
+	outline: 2px solid #ffffff;
+}
+
+input[type="search"]:hover, input[type="search"]:focus {
+	border-color: var(--theme-button);
+}
+
+input[type="search"]:focus {
+	outline-color: #ebf3ff;
+}
+
+#navbar #search {
+	display: flex;
+	margin-left: auto;
+	height: 30px;
+}
+
+#navbar #search .button {
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+	padding: 15px;
+	box-sizing: border-box;
+	height: 100%;
+	color: var(--theme-accent-text);
+}
+
+#navbar #search .button svg {
+	color: var(--theme-accent-text);
+}
+
+#bottom-alert {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding: 14px 20px 14px;
+	background: var(--theme-alert);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	user-select: none;
+}
+
+#bottom-alert * {
+	color: var(--theme-accent-text);
+}
+
+#filled-button {
+	padding: 8px 17px 8px;
+	border-radius: 50px;
+	font-size: 15px;
+	margin-left: auto;
+	border: 2px solid var(--theme-accent-text);
+	transition: all 0.2s;
+	cursor: pointer;
+	letter-spacing: -0.6px;
+}
+
+#filled-button:hover {
+	background: var(--theme-accent-text);
+	color: var(--theme-alert);
+}
+
 @keyframes bounce {
 	0% { transform: scale(1) }
 	30% { transform: scale(1.2) }
@@ -247,17 +395,14 @@ body, html {
 }
 
 @media screen and (max-width: 800px) {
-	#nav #group-pricing, .divider.h {
+	#nav #group-pricing, .divider.h, #filled-button {
 		display: none;
 	}
 	#nav .button {
 		width: fit-content;
 	}
-}
-
-@media screen and (max-width: 600px) {
-	#header {
-		padding: 5px 25px 5px;
+	#navbar #search {
+		display: none;
 	}
 	#header #nav, #nav #group-pricing, .divider.h {
 		display: none;
@@ -324,5 +469,11 @@ body, html {
 	}
 	#menu {
 		display: block;
+	}
+}
+
+@media screen and (max-width: 600px) {
+	#header {
+		padding: 5px 25px 5px;
 	}
 }
