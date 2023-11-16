@@ -1,8 +1,8 @@
-	<%- header ? include("./templates/main") : "" %>
-	<%- account ? include("./templates/dashboard-header") : include("./templates/header") %>
-	<% if (header) { %>
-		<body>
-	<% } %>
+<%- header ? include("./templates/main") : "" %>
+<%- account ? include("./templates/dashboard-header") : include("./templates/header") %>
+<% if (header) { %>
+	<body>
+<% } %>
 		<div id="container" class="creative">
 			<div id="cont">
 				<%- include("./templates/title") %>

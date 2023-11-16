@@ -41,7 +41,7 @@
 }
 
 #container.creative #cont p {
-	width: 700px;
+	max-width: 700px;
 	text-align: center;
 	line-height: 1.5;
 	font-size: 18px;
@@ -111,6 +111,7 @@
 
 #container.creative #my-maps div {
 	letter-spacing: -0.5px;
+	text-align: center;
 }
 
 #container.creative #my-maps div #yellow {
@@ -156,4 +157,19 @@
 	background: #36913a;
 	box-shadow: 0px 8px #1b5e20, 0px 13px 0 rgba(0, 0, 0, 0.2);
 	transition-duration: 0.2s;
+}
+
+@media screen and (max-width: 800px) {
+	body:has(#container.creative) #menu svg {
+		fill: var(--theme-accent-text);
+	}
+	body:has(#container.creative) #nav.menu {
+		background: #222;
+	}
+	body:has(#container.creative) #nav.menu * {
+		color: var(--theme-accent-text);
+	}
+	body:has(#container.creative) .divider {
+		background: var(--header-dark-border);
+	}
 }
