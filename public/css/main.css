@@ -19,7 +19,7 @@
 	--theme-alert: #c62828;
 }
 
-::-webkit-scrollbar {
+body:has(#header:not(.dark)) ::-webkit-scrollbar {
 	width: 0;
 }
 
@@ -37,7 +37,7 @@ body, html {
 	left: 0;
 	right: 0;
 	display: flex;
-	z-index: 1;
+	z-index: 2;
 	background: var(--header-bg);
 	backdrop-filter: blur(4px);
 	padding: 10px 25px 10px;
@@ -53,6 +53,10 @@ body, html {
 	border-color: var(--header-dark-border);
 }
 
+#header.dark .divider {
+	background: var(--header-dark-border);
+}
+
 #header.dark * {
 	color: var(--theme-accent-text);
 }
@@ -63,6 +67,40 @@ body, html {
 
 #header .button, .menu .button {
 	box-shadow: none;
+}
+
+#header.dark:has(#navbar:not(.b)) {
+	border-bottom: none;
+}
+
+#navbar:not(.b) {
+	border-bottom: 1px solid var(--header-dark-border);
+	backdrop-filter: blur(4px);
+}
+
+#navbar:not(.b) .button.rounded:not(.selected):hover {
+	background: rgba(255, 255, 255, 0.1);
+}
+
+#header.dark #navbar {
+	padding: 10px 25px 10px;
+	backdrop-filter: blur(4px);
+}
+
+#header.dark #currency {
+	margin-left: auto;
+	background: rgba(255, 255, 255, 0.1);
+	border-radius: 5px;
+	padding: 5px 12px 5px;
+	font-style: italic;
+	font-size: 18px;
+	gap: 4px;
+	align-items: center;
+	justify-content: center;
+}
+
+#header.dark #currency img {
+	height: 20px;
 }
 
 #menu {
@@ -92,10 +130,11 @@ body, html {
 	top: 100%;
 	left: 0;
 	right: 0;
+	z-index: 1;
 	background: inherit;
 	color: inherit;
 	border: inherit;
-	backdrop-filter: inherit;
+	backdrop-filter: blur(4px);
 	display: flex;
 	gap: 8px;
 	padding: 8px 25px 8px;
@@ -103,6 +142,7 @@ body, html {
 
 #navbar.b {
 	border-top: 1px solid var(--header-border);
+	backdrop-filter: blur(4px);
 }
 
 #footer {

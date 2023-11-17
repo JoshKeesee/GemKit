@@ -1,6 +1,6 @@
 let loading = false, socket, email;
 
-const redirect = async e => {
+const redirect = async (e, h = true) => {
 	if (typeof e == "object") e.preventDefault();
 	if (loading) return;
 	const url = typeof e != "object" ? e : e.target.href ? e.target.href : e.target.parentElement.href;
@@ -18,14 +18,15 @@ const redirect = async e => {
 	document.body.innerHTML = await data.text();
 	document.querySelectorAll("a").forEach(e => e.onclick = redirect);
 	const p = (url || "/").replace(window.location.origin, "");
-	updateURL(p, true);
+	updateURL(p, h);
 	update();
 	loading = false;
 };
 
 const updateURL = (url, set) => {
 	if (set) window.history.pushState({}, "", url);
-	const p = url.replaceAll("/", " ").replace("signup", "sign up");
+	const w = url.split("/");
+	const p = w[w.length - 1].replaceAll("/", " ").replaceAll("-", " ").replace("signup", "sign up");
 	const d = p.replace(/(^\w{1})|(\s+\w{1})/g, l => l.toUpperCase());
 	document.title = window.location.pathname == "/creative" ? appName + " Creative" : window.location.pathname == "/me" || window.location.pathname == "/kits" ? "Dashboard | " + appName : window.location.pathname == "/join" ? "Play " + appName + "! - Enter game code here | " + appName : d && p != " " ? d + " | " + appName : url.split("?")[0].endsWith("/") ? appName + " - live learning game show" : appName;
 }
@@ -291,7 +292,7 @@ const toggleMenu = () => {
 
 window.onload = () => update();
 window.onpopstate = () => {
-	redirect(document.referrer);
+	redirect(window.location.pathname, false);
 };
 
 updateURL(window.location.pathname, false);

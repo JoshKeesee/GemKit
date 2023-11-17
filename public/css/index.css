@@ -181,7 +181,7 @@ section.big.dark p {
 		margin-right: 25px;
 		max-width: 100%;
 	}
-	#left, #right, img[src="images/modes.png"] {
+	#left, #right, img[src="/../images/modes.png"] {
 		display: none;
 	}
 	section #img.big {

@@ -1,0 +1,41 @@
+<%- header ? include("./templates/main") : "" %>
+<%- account ? include("./templates/dashboard-header") : include("./templates/header") %>
+<% if (header) { %>
+	<body>
+<% } %>
+	<div id="container" class="rewards">
+		<div id="cont">
+			<div id="section">
+				<div id="gem"><img src="" /></div>
+				<h3>Season 1</h3>
+				<h1>Level 1</h1>
+				<div class="flex">
+					<div id="xp"><%= account.xp || 0 %>/1000XP</div>
+					<div id="need-xp">1000 XP TO LEVEL 1</div>
+				</div>
+				<progress max="1000" value="<%= (account.xp || 0) < 1000 / 100 + 1000 / 100 %>"></progress>
+				<div>
+					<b>Earn XP to level up.</b> Each time you level up, you'll earn <b>100 GemBucks</b> which you can use to purchase items in the Item Shop.
+				</div>
+				<br>
+				<div>
+					You can earn XP in 2D modes. To earn XP, answer questions correctly, knockout other players, catch rare fish, tag players, purchase upgrades, and complete other actions!
+				</div>
+			</div>
+			<h1>Limits</h1>
+			<div id="section">
+				<h2>Weekly XP</h2>
+				<p>Resets on Wednesndays at 2:00pm EST</p>
+				<div>
+					<div><%= account.weeklyxp || 0 %>/15,000 XP</div>
+					<progress max="15000" value="<%= (account.weeklyxp || 0) + 15000 / 100 %>"></progress>
+				</div>
+				<div id="info">
+					Increase your Weekly XP to 20,000 with the <a href="/../season-ticket">Season Ticket</a>
+				</div>
+			</div>
+		</div>
+	</div>
+<% if (header) { %>
+	</body>
+<% } %>

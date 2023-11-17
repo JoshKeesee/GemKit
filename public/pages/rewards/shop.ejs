@@ -1,0 +1,11 @@
+<%- header ? include("../templates/main") : "" %>
+<%- account ? include("../templates/dashboard-header") : include("../templates/header") %>
+<% if (header) { %>
+	<body>
+<% } %>
+	<div id="container" class="rewards">
+		<div id="cont"></div>
+	</div>
+<% if (header) { %>
+	</body>
+<% } %>

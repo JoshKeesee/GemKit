@@ -1,0 +1,46 @@
+<%- header ? include("./templates/main") : "" %>
+<%- account ? include("./templates/dashboard-header") : include("./templates/header") %>
+<% if (header) { %>
+	<body>
+<% } %>
+	<div id="container" class="rewards">
+		<div id="cont">
+			<div id="section">
+				<div id="gem"><img src="/../images/<%= account.gem || 'default_yellow' %>.png" /></div>
+				<h3 id="season">Season <%= account.season || 1 %></h3>
+				<h1>LEVEL <%= (account.xp || 0) % 1000 + 1 %></h1>
+				<div id="xp">
+					<div id="xp-cont">
+						<div><%= account.xp || 0 %>/1000XP</div>
+						<div id="need-xp" class="right"><%= 1000 - (account.xp || 0) %> XP TO LEVEL <%= (account.xp || 0) % 1000 + 2 %></div>
+					</div>
+					<progress max="1100" value="<%= (account.xp || 0) + (1100 / 100) %>"></progress>
+				</div>
+				<div>
+					<b>Earn XP to level up.</b> Each time you level up, you'll earn <b>100 GemBucks</b> which you can use to purchase items in the Item Shop.
+				</div>
+				<br>
+				<div>
+					You can earn XP in 2D modes. To earn XP, answer questions correctly, knockout other players, catch rare fish, tag players, purchase upgrades, and complete other actions!
+				</div>
+			</div>
+			<div id="section-title">LIMITS</div>
+			<div id="section" class="no-i">
+				<h2 class="left">Weekly XP</h2>
+				<p id="left">Resets on Wednesndays at 2:00pm EST</p>
+				<div id="xp">
+					<div id="abs-xp" class="left"><%= account.weeklyxp || 0 %>/<%= (account.seasonticket ? 20000 : 15000).toLocaleString() %> XP</div>
+					<progress class="sm" max="<%= (account.seasonticket ? 20000 : 15000) + 100 %>" value="<%= (account.weeklyxp || 0) + (15000 / 100) %>"></progress>
+				</div>
+				<div id="info">
+					<svg xmlns="http://www.w3.org/2000/svg" viewBox="64 64 896 896" fill="#1677ff" stroke="#1677ff">
+						<path d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm32 664c0 4.4-3.6 8-8 8h-48c-4.4 0-8-3.6-8-8V456c0-4.4 3.6-8 8-8h48c4.4 0 8 3.6 8 8v272zm-32-344a48.01 48.01 0 010-96 48.01 48.01 0 010 96z"/>
+					</svg>
+					<p class="no-s">Increase your Weekly XP limit to 20,000 with the <a href="/../season-ticket">Season Ticket</a></p>
+				</div>
+			</div>
+		</div>
+	</div>
+<% if (header) { %>
+	</body>
+<% } %>
